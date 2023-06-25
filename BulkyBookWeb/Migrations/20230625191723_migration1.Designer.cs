@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBookWeb.Migrations
 {
     [DbContext(typeof(AuthDBContext))]
-    [Migration("20230622194215_AddCategoryToMSDatabase2")]
-    partial class AddCategoryToMSDatabase2
+    [Migration("20230625191723_migration1")]
+    partial class migration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

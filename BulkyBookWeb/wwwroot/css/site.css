@@ -1,18 +1,71 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.newMessage {
+    width: 95%;
+    margin: auto;
+    background:rgba(0,0,0,0);
+    position:relative;
+}
+
+    .newMessage:after {
+        content: "";
+        animation: growbox 0.5s ease forwards;
+        height: 100%;
+        width: 0px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: -1;
+        border-radius: 0 0px 10px 10px;
+    }
+
+    .newMessage span {
+        visibility: hidden;
+        animation: displaytextonlate 0.1s ease forwards;
+        animation-delay: 0.5s;
+        z-index:2;
+        color:white;
+    }
+
+.message-success:after {
+    background-color: rgb(3, 48, 15);
+}
+.message-fail:after {
+    background-color: rgb(66, 0, 0);
+}
+
+@keyframes growbox {
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes displaytextonlate {
+    100% {
+        visibility: visible;
+    }
+}
+
+
+.input:disabled {
+    background-color: #DD171717;
+    color: #C5FFFFFF;
 }

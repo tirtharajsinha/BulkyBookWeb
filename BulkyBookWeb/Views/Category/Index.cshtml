@@ -1,41 +1,51 @@
-﻿@model Tuple<List<Category>, String>
+﻿@model Tuple<List<Category>, String, String, String>
 @{
-    ViewData["Title"] = Model.Item2;
+	ViewData["Title"] = Model.Item2;
 }
+
+
 
 <div class="container">
 
-    <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
-        <div class="p-2 fs-3">@Model.Item2</div>
-        <div class="p-2"><a asp-controller="Category" asp-action="Create" class="btn btn-info"><i class="far fa-plus"></i> New Category</a></div>
-    </div>
-    
+	@if (Model.Item3 != "")
+	{
+		<div class="text-black p-2 rounded-bottom newMessage message-@Model.Item4">
+			<span><i class="fal fa-info-circle"></i> @Model.Item3</span>
+		</div>
+	}
 
+	<div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+		<div class="p-2 fs-3">@Model.Item2</div>
+		<div class="p-2"><a asp-controller="Category" asp-action="Create" class="btn btn-info"><i class="far fa-plus"></i> New Category</a></div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Name</th>
+					<th scope="col">Display Order</th>
+					<th scope="col">Created/Updated On</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.Item1)
+				{
+					<tr>
+						<th scope="row">@item.Id</th>
+						<td>@item.Name</td>
+						<td>@item.DisplayOrder</td>
+						<td>@item.CreatedDateTime</td>
+						<td>
+							<a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="text-warning me-4 p-2"><i class="fal fa-pencil"></i></a>
+							<a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" class="text-danger p-2"><i class="fal fa-trash"></i></a>
+						</td>
+					</tr>
 
-
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Display Order</th>
-                <th scope="col">DateTime</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Item1)
-            {
-                <tr>
-                    <th scope="row">@item.Id</th>
-                    <td>@item.Name</td>
-                    <td>@item.DisplayOrder</td>
-                    <td>@item.CreatedDateTime</td>
-                </tr>
-
-            }
-
-
-        </tbody>
-    </table>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>
 

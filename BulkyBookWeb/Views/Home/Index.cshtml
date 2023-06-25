@@ -1,16 +1,23 @@
 ﻿@model System.Security.Claims.ClaimsIdentity
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    @if (Model.IsAuthenticated)
-    {
-        <h3>@Model.Name is Authenticated.</h3>
-    }
-    else
-    {
-        <h3>You are not Authenticated.</h3>
-    }
+	<h1 class="display-4">Welcome</h1>
+	@if (Model.IsAuthenticated)
+	{
+		<h3>@Model.Name is Authenticated.</h3>
+	}
+	else
+	{
+		<h3>You are not Authenticated.</h3>
+	}
+	<h3 class="mt-5"><i class="fal fa-quote-left"></i></h3>
+	<h3 class="text-info text-center">
+
+		Why do Java Developers wear glasses?<br>
+		Because they can't see-sharp.<br />
+	</h3>
+	<h3><i class="fal fa-quote-right"></i></h3>
 </div>
