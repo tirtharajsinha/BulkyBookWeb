@@ -1,0 +1,16 @@
+﻿@model System.Security.Claims.ClaimsIdentity
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    @if (Model.IsAuthenticated)
+    {
+        <h3>@Model.Name is Authenticated.</h3>
+    }
+    else
+    {
+        <h3>You are not Authenticated.</h3>
+    }
+</div>
