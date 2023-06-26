@@ -52,6 +52,10 @@ body {
     background-color: rgb(66, 0, 0);
 }
 
+.message-warning:after {
+    background-color: #574000;
+}
+
 @keyframes growbox {
     100% {
         width: 100%;
@@ -68,4 +72,9 @@ body {
 .input:disabled {
     background-color: #DD171717;
     color: #C5FFFFFF;
+}
+
+.samesizebtn{
+    height:42px;
+    width:50px;
 }

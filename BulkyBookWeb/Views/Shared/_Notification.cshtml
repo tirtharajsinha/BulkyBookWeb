@@ -1,0 +1,6 @@
+﻿@if (TempData["Message"] != null)
+{
+	<div class="text-black p-2 rounded-bottom newMessage message-@TempData["MessageType"]">
+		<span><i class="fal fa-info-circle"></i> @TempData["Message"]</span>
+	</div>
+}

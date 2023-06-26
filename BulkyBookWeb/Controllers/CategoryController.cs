@@ -1,6 +1,9 @@
-﻿using BulkyBookWeb.Data;
+﻿using Azure;
+using Azure.Core;
+using BulkyBookWeb.Data;
 using BulkyBookWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,16 +35,10 @@ namespace BulkyBookWeb.Controllers
             String MessageType = "success";
 
 
-            if (Request.Cookies["Message"] != null)
-            {
-                var messages = JObject.Parse(Request.Cookies["Message"]);
-                Message = $"{messages["Message"]}";
-                MessageType = $"{messages["MessageType"]}";
-                Response.Cookies.Delete("Message");
-            }
+           
 
             List<Category> objCategoryList = _db.Categories.ToList();
-            Tuple<List<Category>, String, String, String> ViewContext = new Tuple<List<Category>, String, String, String>(objCategoryList, "Categories", Message, MessageType);
+            Tuple<List<Category>, String> ViewContext = new Tuple<List<Category>, String>(objCategoryList, "Categories");
 
             return View(ViewContext);
         }
@@ -62,11 +59,10 @@ namespace BulkyBookWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                var dict = new Hashtable();
-                dict["MessageType"] = "success";
-                dict["Message"] = $"One Category Added Successfully.";
-                var sessiondata = JsonConvert.SerializeObject(dict);
-                Response.Cookies.Append("Message", sessiondata, cookieOptions);
+                
+                TempData["MessageType"] = "success";
+                TempData["Message"] = $"One Category Added Successfully.";
+                
 
                 DateTime curDateTime = DateTime.Now;
                 obj.CreatedDateTime = curDateTime;
@@ -78,24 +74,26 @@ namespace BulkyBookWeb.Controllers
         }
 
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
+            if(id != null) {
+                NotFound();
+            }
             Category obj = _db.Categories.FirstOrDefault(x => x.Id == id);
             if (obj == null)
             {
-                var dict = new Hashtable();
-                dict["MessageType"] = "fail";
-                dict["Message"] = $"Element not found on Id : {id}, Edit Request Denied!";
-                var sessiondata = JsonConvert.SerializeObject(dict);
-                Response.Cookies.Append("Message", sessiondata, cookieOptions);
+                
+                TempData["MessageType"] = "fail";
+                TempData["Message"] = $"Element not found on Id : {id}, Edit Request Denied!";
+                
                 return RedirectToAction("Index", "Category");
             }
             return View(obj);
         }
 
-        [HttpPost]
+        [HttpPost,ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj)
+        public IActionResult EditPOST(Category obj)
         {
             if (obj.Name != null && !Regex.IsMatch(obj.Name, @"^[a-zA-Z]+$"))
             {
@@ -103,11 +101,10 @@ namespace BulkyBookWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                var dict = new Hashtable();
-                dict["MessageType"] = "success";
-                dict["Message"] = $"One Category Updated Successfully on Id : {obj.Id}.";
-                var sessiondata = JsonConvert.SerializeObject(dict);
-                Response.Cookies.Append("Message", sessiondata, cookieOptions);
+                
+                TempData["MessageType"] = "success";
+                TempData["Message"] = $"One Category Updated Successfully on Id : {obj.Id}.";
+                
 
                 DateTime curDateTime = DateTime.Now;
                 obj.CreatedDateTime = curDateTime;
@@ -118,29 +115,54 @@ namespace BulkyBookWeb.Controllers
             return View(obj);
         }
 
-        public IActionResult Delete(int id)
+		[ActionName("Delete")]
+		public IActionResult Delete_(int id)
         {
-            var dict = new Hashtable();
-            String sessiondata;
             Category categoryToDelete = _db.Categories.FirstOrDefault(x => x.Id == id);
             if (categoryToDelete == null)
             {
                 
-                dict["MessageType"] = "fail";
-                dict["Message"] = $"Element not found on Id : {id}, Deletion Failed!";
-                sessiondata = JsonConvert.SerializeObject(dict);
-                Response.Cookies.Append("Message", sessiondata, cookieOptions);
+                TempData["MessageType"] = "fail";
+                TempData["Message"] = $"Element not found on Id : {id}, Deletion Failed!";
+                
                 return RedirectToAction("Index", "Category");
             }
 
             _db.Categories.Remove(categoryToDelete);
             _db.SaveChanges();
-            
-            dict["MessageType"] = "success";
-            dict["Message"] = $"One Category Removed Successfully.";
-            sessiondata = JsonConvert.SerializeObject(dict);
-            Response.Cookies.Append("Message", sessiondata, cookieOptions);
-            return RedirectToAction("Index", "Category");
+            TempData["Message"] = $"One Category Removed Successfully.";
+            TempData["MessageType"] = "success";
+
+			return RedirectToAction("Index", "Category");
         }
     }
 }
+
+
+/*
+// Add data to cookies:
+dict["MessageType"] = "success";
+dict["Message"] = $"One Category Removed Successfully.";
+sessiondata = JsonConvert.SerializeObject(dict);
+Response.Cookies.Append("Message", sessiondata, cookieOptions);
+
+
+#################
+
+// Read data from Cookies:
+if (Request.Cookies["Message"] != null)
+{
+	var messages = JObject.Parse(Request.Cookies["Message"]);
+	Message = $"{messages["Message"]}";
+	MessageType = $"{messages["MessageType"]}";
+	
+}
+
+################
+
+// delete Cookies
+
+Response.Cookies.Delete("Message");
+
+ */
+

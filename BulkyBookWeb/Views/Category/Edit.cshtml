@@ -7,16 +7,16 @@
 
 <form method="post" style="max-width:600px" class="m-auto m-3 mt-5">
     <div class="mb-3 text-success fs-4">Edit Category | Id : @Model.Id</div>
-    <input asp-for="Id" value=@Model.Id hidden/>
+    
     <div class="mb-3">
         <label for="Name" asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" value="@Model.Name" class="form-control bg-light text-white" id="Name" aria-describedby="Name" placeholder="Name of Category">
+        <input asp-for="Name" class="form-control bg-light text-white" id="Name" aria-describedby="Name" placeholder="Name of Category">
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label for="DisplayOrder" asp-for="DisplayOrder" class="form-label"></label>
-        <input asp-for="DisplayOrder" value="@Model.DisplayOrder" class="form-control bg-light text-white" id="DisplayOrder" placeholder="Display Order of your category">
+        <input asp-for="DisplayOrder" class="form-control bg-light text-white" id="DisplayOrder" placeholder="Display Order of your category">
         <span asp-validation-for="DisplayOrder" class="text-danger"></span>
     </div>
 
